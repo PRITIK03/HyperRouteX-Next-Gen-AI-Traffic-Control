@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a1a2e;
+      color: white;
+      padding: 20px;
+    }
+    .test-section {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dashboard Test</h1>
+  <div class="test-section">
+    <h2>Module Loading Test</h2>
+    <div id="status">Testing...</div>
+  </div>
+  
+  <script type="module">
+    const statusDiv = document.getElementById('status');
+    
+    async function testModules() {
+      try {
+        // Test if fetch works
+        const response = await fetch('./data/dummy_traffic.json');
+        if (!response.ok) {
+          statusDiv.innerHTML = `❌ Failed to load data: ${response.status}`;
+          statusDiv.style.color = 'red';
+          return;
+        }
+        
+        const data = await response.json();
+        statusDiv.innerHTML = `✅ Successfully loaded data! Found ${data.length} junctions.`;
+        statusDiv.style.color = 'lightgreen';
+        
+        // Show first junction
+        if (data.length > 0) {
+          statusDiv.innerHTML += `<br>First junction: ${data[0].name}`;
+        }
+      } catch (error) {
+        statusDiv.innerHTML = `❌ Error: ${error.message}`;
+        statusDiv.style.color = 'red';
+        console.error('Test failed:', error);
+      }
+    }
+    
+    testModules();
+  </script>
+</body>
+</html>

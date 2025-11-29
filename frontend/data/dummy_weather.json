@@ -1,0 +1,5 @@
+[
+  {"junction":"Big Ben, London","temp":"12°C","condition":"Cloudy","humidity":"78%"},
+  {"junction":"Times Square, NYC","temp":"18°C","condition":"Sunny","humidity":"60%"},
+  {"junction":"Central Park, NYC","temp":"16°C","condition":"Rain","humidity":"85%"}
+]

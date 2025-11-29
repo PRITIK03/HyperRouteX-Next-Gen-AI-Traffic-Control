@@ -1,0 +1,11 @@
+[
+  {"junction_id":1,"name":"Big Ben, London","congestion_level":2.1,"vehicle_count":120,"avg_speed":35,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":2,"name":"Times Square, NYC","congestion_level":3.5,"vehicle_count":180,"avg_speed":28,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":3,"name":"Central Park, NYC","congestion_level":1.8,"vehicle_count":90,"avg_speed":42,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":4,"name":"Union Station, DC","congestion_level":2.9,"vehicle_count":150,"avg_speed":31,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":5,"name":"City Hall, Chicago","congestion_level":4.2,"vehicle_count":200,"avg_speed":22,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":6,"name":"Airport Terminal, LA","congestion_level":2.7,"vehicle_count":130,"avg_speed":37,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":7,"name":"Harbor View, Miami","congestion_level":3.1,"vehicle_count":160,"avg_speed":29,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":8,"name":"Grand Mall, Dallas","congestion_level":1.5,"vehicle_count":80,"avg_speed":45,"timestamp":"2025-11-07T16:00:00Z"},
+  {"junction_id":9,"name":"Stadium Plaza, Denver","congestion_level":2.3,"vehicle_count":110,"avg_speed":39,"timestamp":"2025-11-07T16:00:00Z"}
+]

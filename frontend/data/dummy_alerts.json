@@ -1,0 +1,5 @@
+[
+  {"time":"16:45","junction":"Times Square, NYC","type":"Accident","severity":"High"},
+  {"time":"15:20","junction":"City Hall, Chicago","type":"Congestion","severity":"Medium"},
+  {"time":"14:05","junction":"Harbor View, Miami","type":"Roadwork","severity":"Low"}
+]

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚦 Smart Traffic Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-traffic-light"></i>
+                <h1>Smart Traffic Management System</h1>
+            </div>
+            <div class="header-controls">
+                <div class="status-indicator">
+                    <span class="status-dot active"></span>
+                    <span class="status-text">System Online</span>
+                </div>
+                <div class="time-display" id="current-time">00:00:00</div>
+                <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="keyboard-shortcuts-btn" id="keyboard-shortcuts-btn" title="Keyboard shortcuts">
+                    <i class="fas fa-keyboard"></i>
+                </button>
+                <button class="notification-btn" id="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+        <button class="tab-btn active" data-tab="traffic-monitor" title="Monitor live traffic conditions">
+            <i class="fas fa-video"></i> Traffic Monitor
+        </button>
+        <button class="tab-btn" data-tab="analytics" title="View traffic analytics and reports">
+            <i class="fas fa-chart-line"></i> Analytics
+        </button>
+        <button class="tab-btn" data-tab="signal-control" title="Control and optimize traffic signals">
+            <i class="fas fa-traffic-light"></i> Signal Control
+        </button>
+        <button class="tab-btn" data-tab="emergency" title="Emergency response management">
+            <i class="fas fa-exclamation-triangle"></i> Emergency
+        </button>
+        <button class="tab-btn" data-tab="settings" title="System configuration and settings">
+            <i class="fas fa-cog"></i> Settings
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Traffic Monitor Tab -->
+        <section id="traffic-monitor" class="tab-content active">
+            <div class="section-header">
+                <h2><i class="fas fa-video"></i> Live Traffic Monitoring</h2>
+                <div class="controls">
+                    <div class="search-container">
+                        <input type="text" id="junction-search" placeholder="Search junctions..." class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <button class="btn-primary" id="refresh-btn" title="Refresh traffic data">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                        <button class="btn-danger" id="emergency-alert-btn" title="Emergency Alert">
+                            <i class="fas fa-exclamation-triangle"></i> Emergency
+                        </button>
+                    <div class="auto-refresh-toggle">
+                        <label class="switch">
+                            <input type="checkbox" id="auto-refresh" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Auto Refresh</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="traffic-grid">
+                <!-- Junction cards statically for all 9 images -->
+                <div class="junction-card" id="junction-1">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 1</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/1.jpg" alt="Junction 1 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Big Ben, London</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-2">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 2</span>
+                    </div>
+                        <div class="junction-image animated">
+                            <img src="./predicted0/1.jpg" alt="Junction 1 Camera" class="junction-camera-image" />
+                        </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/2.jpg" alt="Junction 2 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Times Square, NYC</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-3">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 3</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/3.jpg" alt="Junction 3 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Central Park, NYC</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-4">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 4</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/4.jpg" alt="Junction 4 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Union Station, DC</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-5">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 5</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/5.jpg" alt="Junction 5 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">City Hall, Chicago</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-6">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 6</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/6.jpg" alt="Junction 6 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Airport Terminal, LA</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-7">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 7</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/7.jpg" alt="Junction 7 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Harbor View, Miami</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-8">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 8</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/8.jpg" alt="Junction 8 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Grand Mall, Dallas</span>
+                    </div>
+                </div>
+                <div class="junction-card" id="junction-9">
+                    <div class="junction-header">
+                        <span class="junction-title">Junction 9</span>
+                    </div>
+                    <div class="junction-image">
+                        <img src="./predicted0/9.jpg" alt="Junction 9 Camera" class="junction-camera-image" />
+                    </div>
+                    <div class="junction-info">
+                        <span class="location-name">Stadium Plaza, Denver</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-chart-bar"></i> System Stats</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Junctions:</span>
+                        <span class="stat-value" id="total-junctions">9</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Active Monitoring:</span>
+                        <span class="stat-value status-active">Yes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Last Update:</span>
+                        <span class="stat-value" id="last-update">--</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-tachometer-alt"></i> Performance</h3>
+                    <div class="performance-metrics">
+                        <div class="metric">
+                            <span class="metric-label">CPU Usage:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="cpu-usage" style="width: 45%"></div>
+                            </div>
+                            <span class="metric-value">45%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Memory:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="memory-usage" style="width: 62%"></div>
+                            </div>
+                            <span class="metric-value">62%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Network:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="network-usage" style="width: 28%"></div>
+                            </div>
+                            <span class="metric-value">28%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-cloud-sun"></i> Weather</h3>
+                    <div class="weather-info">
+                        <div class="weather-icon">
+                            <i class="fas fa-sun" id="weather-icon"></i>
+                        </div>
+                        <div class="weather-details">
+                            <div class="temperature" id="weather-temp">22°C</div>
+                            <div class="condition" id="weather-condition">Sunny</div>
+                            <div class="humidity" id="weather-humidity">Humidity: 65%</div>
+                            <div class="visibility" id="weather-visibility">Visibility: 10km</div>
+                            <div class="wind-speed" id="weather-wind">Wind: 5 km/h</div>
+                            <div class="traffic-impact" id="weather-impact">Traffic Impact: Low</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <!-- Analytics Tab -->
+        <section id="analytics" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Traffic Analytics Dashboard</h2>
+                <div class="controls">
+                    <button class="btn-secondary" id="export-analytics-btn" title="Export analytics data">
+                        <i class="fas fa-file-export"></i> Export Report
+                    </button>
+                    <div class="time-range-selector">
+                        <button class="time-btn active" data-range="1h">1H</button>
+                        <button class="time-btn" data-range="24h">24H</button>
+                        <button class="time-btn" data-range="7d">7D</button>
+                        <button class="time-btn" data-range="30d">30D</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="chart-card">
+                    <h3>Traffic Flow Trends</h3>
+                    <canvas id="traffic-flow-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Congestion Levels</h3>
+                    <canvas id="congestion-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Junction Performance</h3>
+                    <canvas id="junction-performance-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Peak Hours Analysis</h3>
+                    <canvas id="peak-hours-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="analytics-summary">
+                <div class="summary-card">
+                    <h4>Average Congestion</h4>
+                    <div class="summary-value" id="avg-congestion">2.8 min</div>
+                    <div class="summary-trend positive">
+                        <i class="fas fa-arrow-down"></i> 12% from last week
+                    </div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Emergency Alerts</h4>
+                        <div class="summary-value" id="emergency-count">--</div>
+                        <div class="summary-trend negative">
+                            <i class="fas fa-arrow-up"></i> Last 24h
+                        </div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <h4>Total Vehicles</h4>
+                    <div class="summary-value" id="total-vehicles">15,420</div>
+                    <div class="summary-trend positive">
+                        <i class="fas fa-arrow-up"></i> 8% from yesterday
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <h4>Emergency Response</h4>
+                    <div class="summary-value" id="emergency-count">3</div>
+                    <div class="summary-trend negative">
+                        <i class="fas fa-arrow-up"></i> 2 from last week
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <h4>System Uptime</h4>
+                    <div class="summary-value" id="system-uptime">99.8%</div>
+                    <div class="summary-trend positive">
+                        <i class="fas fa-arrow-up"></i> 0.2% improvement
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signal Control Tab -->
+        <section id="signal-control" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-traffic-light"></i> Adaptive Signal Control</h2>
+                <div class="controls">
+                    <button class="btn-primary" id="optimize-btn">
+                        <i class="fas fa-brain"></i> AI Optimize
+                    </button>
+                    <button class="btn-secondary" id="manual-override-btn">
+                        <i class="fas fa-hand-paper"></i> Manual Override
+                    </button>
+                </div>
+            </div>
+
+            <div class="signal-control-grid">
+                <!-- Signal control cards will be dynamically generated -->
+            </div>
+
+            <div class="signal-stats">
+                <div class="stat-card">
+                    <h4>Active Signals</h4>
+                    <div class="stat-number" id="active-signals">36</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Average Cycle Time</h4>
+                    <div class="stat-number" id="avg-cycle-time">85s</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Emergency Priority</h4>
+                    <div class="stat-number" id="emergency-priority">2</div>
+                </div>
+                <div class="stat-card">
+                    <h4>AI Interventions</h4>
+                    <div class="stat-number" id="ai-interventions">24</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Tab -->
+        <section id="emergency" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Emergency Response Center</h2>
+                <div class="controls">
+                    <button class="btn-danger" id="emergency-alert-btn">
+                        <i class="fas fa-siren-on"></i> Emergency Alert
+                    </button>
+                    <button class="btn-warning" id="clear-alerts-btn">
+                        <i class="fas fa-times"></i> Clear All
+                    </button>
+                </div>
+            </div>
+
+            <div class="emergency-dashboard">
+                <div class="emergency-map">
+                    <div class="map-placeholder">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>Interactive City Map</p>
+                        <small>Emergency routes & incident locations</small>
+                    </div>
+                </div>
+
+                <div class="emergency-panel">
+                    <div class="active-incidents">
+                        <h3>Active Incidents</h3>
+                        <div class="incident-list" id="incident-list">
+                            <!-- Incidents will be dynamically added -->
+                        </div>
+                    </div>
+
+                    <div class="emergency-controls">
+                        <h3>Quick Actions</h3>
+                        <div class="control-buttons">
+                            <button class="emergency-btn ambulance">
+                                <i class="fas fa-ambulance"></i> Ambulance
+                            </button>
+                            <button class="emergency-btn fire">
+                                <i class="fas fa-fire-extinguisher"></i> Fire Dept
+                            </button>
+                            <button class="emergency-btn police">
+                                <i class="fas fa-shield-alt"></i> Police
+                            </button>
+                            <button class="emergency-btn tow">
+                                <i class="fas fa-truck"></i> Tow Truck
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Tab -->
+        <section id="settings" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> System Settings</h2>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-section">
+                    <h3>Display Settings</h3>
+                    <div class="setting-item">
+                        <label for="theme-select">Theme:</label>
+                        <select id="theme-select">
+                            <option value="dark">Dark</option>
+                            <option value="light">Light</option>
+                            <option value="auto">Auto</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="animation-speed">Animation Speed:</label>
+                        <input type="range" id="animation-speed" min="50" max="200" value="100">
+                        <span id="animation-speed-value">100%</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="refresh-interval">Refresh Interval:</label>
+                        <select id="refresh-interval">
+                            <option value="1000">1 second</option>
+                            <option value="3000" selected>3 seconds</option>
+                            <option value="5000">5 seconds</option>
+                            <option value="10000">10 seconds</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Alert Settings</h3>
+                    <div class="setting-item checkbox">
+                        <input type="checkbox" id="sound-alerts" checked>
+                        <label for="sound-alerts">Sound Alerts</label>
+                    </div>
+                    <div class="setting-item checkbox">
+                        <input type="checkbox" id="visual-alerts" checked>
+                        <label for="visual-alerts">Visual Alerts</label>
+                    </div>
+                    <div class="setting-item checkbox">
+                        <input type="checkbox" id="notification-alerts" checked>
+                        <label for="notification-alerts">Browser Notifications</label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="congestion-threshold">Congestion Alert Threshold:</label>
+                        <input type="number" id="congestion-threshold" min="1" max="10" value="4" step="0.5">
+                        <span>minutes</span>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Data Management</h3>
+                    <div class="setting-item">
+                        <label for="export-format">Export Format:</label>
+                        <select id="export-format">
+                            <option value="json">JSON</option>
+                            <option value="csv">CSV</option>
+                            <option value="pdf">PDF Report</option>
+                        </select>
+                    </div>
+                    <button class="btn-secondary" id="export-data-btn">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                    <button class="btn-danger" id="clear-data-btn">
+                        <i class="fas fa-trash"></i> Clear All Data
+                    </button>
+                </div>
+
+                <div class="settings-section">
+                    <h3>System Information</h3>
+                    <div class="system-info">
+                        <div class="info-item">
+                            <span class="info-label">Version:</span>
+                            <span class="info-value">2.1.0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Updated:</span>
+                            <span class="info-value" id="last-updated">2025-10-29</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Browser:</span>
+                            <span class="info-value" id="browser-info">Chrome 119</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Connection:</span>
+                            <span class="info-value status-active">Online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notification-panel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button class="close-btn" id="close-notifications">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <!-- Notifications will be dynamically added -->
+        </div>
+    </div>
+
+    <!-- Modal for Emergency Alert -->
+    <div class="modal" id="emergency-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Emergency Alert</h3>
+                <button class="close-btn" id="close-emergency-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-form">
+                    <div class="form-group">
+                        <label for="alert-type">Alert Type:</label>
+                        <select id="alert-type">
+                            <option value="accident">🚗 Accident</option>
+                            <option value="fire">🔥 Fire</option>
+                            <option value="medical">🚑 Medical Emergency</option>
+                            <option value="security">🚔 Security Threat</option>
+                            <option value="weather">🌪️ Weather Emergency</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alert-location">Location:</label>
+                        <select id="alert-location">
+                            <option value="junction-1">Junction 1 - Big Ben</option>
+                            <option value="junction-2">Junction 2 - Times Square</option>
+                            <option value="junction-3">Junction 3 - Central Park</option>
+                            <option value="junction-4">Junction 4 - Union Station</option>
+                            <option value="junction-5">Junction 5 - City Hall</option>
+                            <option value="junction-6">Junction 6 - Airport</option>
+                            <option value="junction-7">Junction 7 - Harbor View</option>
+                            <option value="junction-8">Junction 8 - Grand Mall</option>
+                            <option value="junction-9">Junction 9 - Stadium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alert-description">Description:</label>
+                        <textarea id="alert-description" placeholder="Describe the emergency situation..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="alert-priority">Priority:</label>
+                        <select id="alert-priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high" selected>High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-emergency">Cancel</button>
+                <button class="btn-danger" id="send-emergency-alert">Send Alert</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+        <button class="fab-main" id="fab-main" title="Quick Actions">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="fab-menu">
+            <button class="fab-item" id="fab-refresh" title="Quick Refresh">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="fab-item" id="fab-emergency" title="Emergency Alert">
+                <i class="fas fa-exclamation-triangle"></i>
+            </button>
+            <button class="fab-item" id="fab-analytics" title="Quick Analytics">
+                <i class="fas fa-chart-bar"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div class="modal" id="keyboard-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h3>
+                <button class="close-btn" id="close-keyboard-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="shortcuts-grid">
+                    <div class="shortcut-category">
+                        <h4>Navigation</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">1-5</span>
+                            <span class="shortcut-desc">Switch between tabs</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">Ctrl/Cmd + K</span>
+                            <span class="shortcut-desc">Focus search input</span>
+                        </div>
+                    </div>
+                    <div class="shortcut-category">
+                        <h4>Actions</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">Ctrl/Cmd + R</span>
+                            <span class="shortcut-desc">Refresh traffic data</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">Ctrl/Cmd + E</span>
+                            <span class="shortcut-desc">Emergency alert</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">Ctrl/Cmd + T</span>
+                            <span class="shortcut-desc">Toggle theme</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">Ctrl/Cmd + S</span>
+                            <span class="shortcut-desc">Export data</span>
+                        </div>
+                    </div>
+                    <div class="shortcut-category">
+                        <h4>Analytics</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">A</span>
+                            <span class="shortcut-desc">Switch to Analytics tab</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">M</span>
+                            <span class="shortcut-desc">Switch to Traffic Monitor</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">C</span>
+                            <span class="shortcut-desc">Switch to Signal Control</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">E</span>
+                            <span class="shortcut-desc">Switch to Emergency</span>
+                        </div>
+                    </div>
+                    <div class="shortcut-category">
+                        <h4>Other</h4>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">?</span>
+                            <span class="shortcut-desc">Show this help</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="shortcut-keys">Esc</span>
+                            <span class="shortcut-desc">Close modals</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner-container">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-center">
+                    <i class="fas fa-traffic-light"></i>
+                </div>
+            </div>
+            <div class="loading-text">
+                <h3>Loading Smart Traffic System...</h3>
+                <p>Initializing AI algorithms and connecting to traffic sensors</p>
+                <div class="loading-progress">
+                    <div class="progress-bar-fill" id="loading-progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html></content>
+<parameter name="filePath">d:\SEM 7 Project\newgit\Smart-Traffic-Management-System\index.html
