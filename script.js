@@ -1,3 +1,51 @@
+let microAlertsHistory = [];
+let microAlertsChart = null;
+    // Alerts sparkline
+    const ctx4 = document.getElementById('micro-alerts-chart').getContext('2d');
+    microAlertsChart = new Chart(ctx4, {
+        type: 'line',
+        data: {
+            labels: Array(8).fill(''),
+            datasets: [{
+                label: 'Alerts',
+                data: Array(8).fill(0),
+                borderColor: '#c0392b',
+                backgroundColor: 'rgba(192,57,43,0.08)',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.4,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { display: false, min: 0, max: 10 }
+            },
+            elements: { line: { borderCapStyle: 'round' } },
+            animation: false
+        }
+    });
+    updateMicroAlertsChart();
+// Update alerts sparkline micro chart
+function updateMicroAlertsChart() {
+    // Use number of active incidents as alert count (simulate if needed)
+    let alertCount = 0;
+    if (typeof incidents !== 'undefined' && Array.isArray(incidents)) {
+        alertCount = incidents.length;
+    } else {
+        // Fallback: random for demo
+        alertCount = Math.floor(Math.random() * 4);
+    }
+    microAlertsHistory.push(alertCount);
+    if (microAlertsHistory.length > 8) microAlertsHistory.shift();
+    if (microAlertsChart) {
+        microAlertsChart.data.datasets[0].data = microAlertsHistory;
+        microAlertsChart.update();
+    }
+}
 // Smart Traffic Management System - JavaScript Dashboard
 // Global variables and data structures
 let currentTab = 'traffic-monitor';
