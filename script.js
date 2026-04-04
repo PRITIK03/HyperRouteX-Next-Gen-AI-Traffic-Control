@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Micro chart state
 let microCongestionHistory = [];
 let microCongestionChart = null;
+let microVehicleHistory = [];
+let microVehicleChart = null;
 
 // Helper to determine API base URL. Defaults to http://localhost:8000 but
 // can be overridden by setting window.API_BASE or adding ?api=http://host:port
@@ -68,8 +70,9 @@ function initializeApp() {
 
     // Initialize micro charts (sparklines)
     function initializeMicroCharts() {
-        const ctx = document.getElementById('micro-congestion-chart').getContext('2d');
-        microCongestionChart = new Chart(ctx, {
+        // Congestion sparkline
+        const ctx1 = document.getElementById('micro-congestion-chart').getContext('2d');
+        microCongestionChart = new Chart(ctx1, {
             type: 'line',
             data: {
                 labels: Array(8).fill(''),
@@ -90,6 +93,35 @@ function initializeApp() {
                 scales: {
                     x: { display: false },
                     y: { display: false, min: 0, max: 8 }
+                },
+                elements: { line: { borderCapStyle: 'round' } },
+                animation: false
+            }
+        });
+
+        // Vehicle count sparkline
+        const ctx2 = document.getElementById('micro-vehicle-chart').getContext('2d');
+        microVehicleChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: Array(8).fill(''),
+                datasets: [{
+                    label: 'Vehicles',
+                    data: Array(8).fill(0),
+                    borderColor: '#2980b9',
+                    backgroundColor: 'rgba(41,128,185,0.08)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.4,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { display: false, min: 0, max: 60 }
                 },
                 elements: { line: { borderCapStyle: 'round' } },
                 animation: false
@@ -204,8 +236,21 @@ function updateTrafficMonitor() {
     // Update sidebar stats
     updateSidebarStats();
 
-    // Update micro congestion chart
+    // Update micro charts
     updateMicroCongestionChart();
+    updateMicroVehicleChart();
+// Update vehicle count sparkline micro chart
+function updateMicroVehicleChart() {
+    // Use average vehicle count across all junctions
+    const avgVehicles =
+        junctionData.reduce((sum, j) => sum + (trafficData[j.id]?.vehicles || 0), 0) / junctionData.length;
+    microVehicleHistory.push(Number(avgVehicles.toFixed(0)));
+    if (microVehicleHistory.length > 8) microVehicleHistory.shift();
+    if (microVehicleChart) {
+        microVehicleChart.data.datasets[0].data = microVehicleHistory;
+        microVehicleChart.update();
+    }
+}
 }
 // Update congestion sparkline micro chart
 function updateMicroCongestionChart() {
