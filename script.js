@@ -32,6 +32,8 @@ let microCongestionHistory = [];
 let microCongestionChart = null;
 let microVehicleHistory = [];
 let microVehicleChart = null;
+let microSpeedHistory = [];
+let microSpeedChart = null;
 
 // Helper to determine API base URL. Defaults to http://localhost:8000 but
 // can be overridden by setting window.API_BASE or adding ?api=http://host:port
@@ -122,6 +124,35 @@ function initializeApp() {
                 scales: {
                     x: { display: false },
                     y: { display: false, min: 0, max: 60 }
+                },
+                elements: { line: { borderCapStyle: 'round' } },
+                animation: false
+            }
+        });
+
+        // Speed sparkline
+        const ctx3 = document.getElementById('micro-speed-chart').getContext('2d');
+        microSpeedChart = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: Array(8).fill(''),
+                datasets: [{
+                    label: 'Avg Speed',
+                    data: Array(8).fill(0),
+                    borderColor: '#16a085',
+                    backgroundColor: 'rgba(22,160,133,0.08)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.4,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { display: false, min: 0, max: 70 }
                 },
                 elements: { line: { borderCapStyle: 'round' } },
                 animation: false
@@ -239,6 +270,19 @@ function updateTrafficMonitor() {
     // Update micro charts
     updateMicroCongestionChart();
     updateMicroVehicleChart();
+    updateMicroSpeedChart();
+// Update speed sparkline micro chart
+function updateMicroSpeedChart() {
+    // Use average speed across all junctions
+    const avgSpeed =
+        junctionData.reduce((sum, j) => sum + (trafficData[j.id]?.speed || 0), 0) / junctionData.length;
+    microSpeedHistory.push(Number(avgSpeed.toFixed(1)));
+    if (microSpeedHistory.length > 8) microSpeedHistory.shift();
+    if (microSpeedChart) {
+        microSpeedChart.data.datasets[0].data = microSpeedHistory;
+        microSpeedChart.update();
+    }
+}
 // Update vehicle count sparkline micro chart
 function updateMicroVehicleChart() {
     // Use average vehicle count across all junctions
