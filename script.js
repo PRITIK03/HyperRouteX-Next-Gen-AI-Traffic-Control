@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
+// Micro chart state
+let microCongestionHistory = [];
+let microCongestionChart = null;
+
 // Helper to determine API base URL. Defaults to http://localhost:8000 but
 // can be overridden by setting window.API_BASE or adding ?api=http://host:port
 function getApiBase() {
@@ -59,6 +63,39 @@ function initializeApp() {
     // Start real-time updates
     startRealTimeUpdates();
 
+    // Initialize micro charts
+    initializeMicroCharts();
+
+    // Initialize micro charts (sparklines)
+    function initializeMicroCharts() {
+        const ctx = document.getElementById('micro-congestion-chart').getContext('2d');
+        microCongestionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(8).fill(''),
+                datasets: [{
+                    label: 'Congestion',
+                    data: Array(8).fill(0),
+                    borderColor: '#e67e22',
+                    backgroundColor: 'rgba(230,126,34,0.08)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.4,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { display: false, min: 0, max: 8 }
+                },
+                elements: { line: { borderCapStyle: 'round' } },
+                animation: false
+            }
+        });
+    }
     // Initialize time display
     updateTime();
     setInterval(updateTime, 1000);
@@ -166,6 +203,21 @@ function updateTrafficMonitor() {
 
     // Update sidebar stats
     updateSidebarStats();
+
+    // Update micro congestion chart
+    updateMicroCongestionChart();
+}
+// Update congestion sparkline micro chart
+function updateMicroCongestionChart() {
+    // Use average congestion across all junctions
+    const avgCongestion =
+        junctionData.reduce((sum, j) => sum + (trafficData[j.id]?.congestion || 0), 0) / junctionData.length;
+    microCongestionHistory.push(Number(avgCongestion.toFixed(2)));
+    if (microCongestionHistory.length > 8) microCongestionHistory.shift();
+    if (microCongestionChart) {
+        microCongestionChart.data.datasets[0].data = microCongestionHistory;
+        microCongestionChart.update();
+    }
 }
 
 function updateJunctionDisplay(card, junction, data) {
