@@ -1,3 +1,56 @@
+let microWeatherHistory = [];
+let microWeatherChart = null;
+    // Weather impact sparkline
+    const ctx5 = document.getElementById('micro-weather-chart').getContext('2d');
+    microWeatherChart = new Chart(ctx5, {
+        type: 'line',
+        data: {
+            labels: Array(8).fill(''),
+            datasets: [{
+                label: 'Weather Impact',
+                data: Array(8).fill(0),
+                borderColor: '#8e44ad',
+                backgroundColor: 'rgba(142,68,173,0.08)',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.4,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { display: false, min: 0, max: 3 }
+            },
+            elements: { line: { borderCapStyle: 'round' } },
+            animation: false
+        }
+    });
+    updateMicroWeatherChart();
+// Update weather impact sparkline micro chart
+function updateMicroWeatherChart() {
+    // Weather impact: 0=Low, 1=Moderate, 2=High, 3=Severe
+    let impact = 0;
+    const impactMap = { 'Low': 0, 'Moderate': 1, 'High': 2, 'Severe': 3 };
+    const el = document.getElementById('weather-impact');
+    if (el) {
+        const txt = el.textContent || '';
+        for (const key in impactMap) {
+            if (txt.includes(key)) { impact = impactMap[key]; break; }
+        }
+    } else {
+        // Fallback: random for demo
+        impact = Math.floor(Math.random() * 4);
+    }
+    microWeatherHistory.push(impact);
+    if (microWeatherHistory.length > 8) microWeatherHistory.shift();
+    if (microWeatherChart) {
+        microWeatherChart.data.datasets[0].data = microWeatherHistory;
+        microWeatherChart.update();
+    }
+}
 let microAlertsHistory = [];
 let microAlertsChart = null;
     // Alerts sparkline
