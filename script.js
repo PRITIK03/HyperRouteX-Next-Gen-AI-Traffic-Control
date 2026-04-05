@@ -1,3 +1,51 @@
+let microMemoryHistory = [];
+let microMemoryChart = null;
+    // Memory usage sparkline
+    const ctx7 = document.getElementById('micro-memory-chart').getContext('2d');
+    microMemoryChart = new Chart(ctx7, {
+        type: 'line',
+        data: {
+            labels: Array(8).fill(''),
+            datasets: [{
+                label: 'Memory Usage',
+                data: Array(8).fill(0),
+                borderColor: '#27ae60',
+                backgroundColor: 'rgba(39,174,96,0.08)',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.4,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { display: false, min: 0, max: 100 }
+            },
+            elements: { line: { borderCapStyle: 'round' } },
+            animation: false
+        }
+    });
+    updateMicroMemoryChart();
+// Update memory usage sparkline micro chart
+function updateMicroMemoryChart() {
+    // Get memory usage from sidebar (simulate if not present)
+    let mem = 0;
+    const el = document.getElementById('memory-usage');
+    if (el && el.style && el.style.width) {
+        mem = parseInt(el.style.width);
+    } else {
+        mem = Math.floor(Math.random() * 100);
+    }
+    microMemoryHistory.push(mem);
+    if (microMemoryHistory.length > 8) microMemoryHistory.shift();
+    if (microMemoryChart) {
+        microMemoryChart.data.datasets[0].data = microMemoryHistory;
+        microMemoryChart.update();
+    }
+}
 let microCpuHistory = [];
 let microCpuChart = null;
     // CPU usage sparkline
