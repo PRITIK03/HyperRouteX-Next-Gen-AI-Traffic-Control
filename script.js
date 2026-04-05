@@ -1,3 +1,51 @@
+let microCpuHistory = [];
+let microCpuChart = null;
+    // CPU usage sparkline
+    const ctx6 = document.getElementById('micro-cpu-chart').getContext('2d');
+    microCpuChart = new Chart(ctx6, {
+        type: 'line',
+        data: {
+            labels: Array(8).fill(''),
+            datasets: [{
+                label: 'CPU Usage',
+                data: Array(8).fill(0),
+                borderColor: '#f39c12',
+                backgroundColor: 'rgba(243,156,18,0.08)',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.4,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { display: false, min: 0, max: 100 }
+            },
+            elements: { line: { borderCapStyle: 'round' } },
+            animation: false
+        }
+    });
+    updateMicroCpuChart();
+// Update CPU usage sparkline micro chart
+function updateMicroCpuChart() {
+    // Get CPU usage from sidebar (simulate if not present)
+    let cpu = 0;
+    const el = document.getElementById('cpu-usage');
+    if (el && el.style && el.style.width) {
+        cpu = parseInt(el.style.width);
+    } else {
+        cpu = Math.floor(Math.random() * 100);
+    }
+    microCpuHistory.push(cpu);
+    if (microCpuHistory.length > 8) microCpuHistory.shift();
+    if (microCpuChart) {
+        microCpuChart.data.datasets[0].data = microCpuHistory;
+        microCpuChart.update();
+    }
+}
 let microWeatherHistory = [];
 let microWeatherChart = null;
     // Weather impact sparkline
